@@ -180,7 +180,7 @@ def init_table(ta):
         day = day % 7
 
         # get sunday
-        if day == 0 :
+        if day == 0:
             day = 7
 
         # create weekday objects ranging with weekday_num 1-7 (mon-sun)
@@ -240,6 +240,58 @@ def feed_table(table, arr):
         table.find_pos(x)
 
 
+def write_to_csv(table):
+
+    # localize arrays
+    week = []
+    time = []
+    mode = []
+    median = []
+    mean = []
+    high = []
+    low = []
+    std = []
+
+    # loop over the weekdays
+    for x in table.weekdays:
+
+        # extend current weekday to array
+        week.extend([x.weekday_num] * (int(24 / 0.25)))
+
+        # loop over times of the weekday
+        for y in x.times:
+
+            # save the times
+            time.append(y.time_of_day)
+
+            # save the mode values
+            mode.append(y.statistics[0])
+
+            # save the median values
+            median.append(y.statistics[1])
+
+            # save the mean values
+            mean.append(y.statistics[2])
+
+            # save the highest values
+            high.append(y.statistics[3])
+
+            # save the lowest values
+            low.append(y.statistics[4])
+
+            # save the lowest values
+            std.append(y.statistics[5])
+
+    # dictionary of lists
+    dict = {'Weekday': week, 'Time': time, 'Mode': mode, 'Median': median, 'Mean': mean, 'High': high, 'Low': low, 'Std': std}
+
+    # add dictinoary to dataFrame
+    df = pd.DataFrame(dict)
+
+    # saving the dataFrame (excluding indicies)
+    df.to_csv('save.csv', header=True, index=False)
+
+
 # START OF MAIN
 
 start_time = ti.time()
@@ -287,3 +339,6 @@ for x in ta1.weekdays:
               (y.time_of_day, y.numbers, y.statistics))
 
 print("--- Execution time of program %s seconds ---" % (ti.time()-start_time))
+
+# write table to csv
+write_to_csv(ta1)
