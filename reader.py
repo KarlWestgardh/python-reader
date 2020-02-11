@@ -1,6 +1,10 @@
 # import csv reader/writer
 import pandas as pd
 
+# import histogram 
+import numpy as np
+import matplotlib.pyplot as plt
+
 # import for time measuring
 import time as ti
 
@@ -252,6 +256,9 @@ def write_to_csv(table):
     low = []
     std = []
 
+    counter = 0
+    indicies = []
+
     # loop over the weekdays
     for x in table.weekdays:
 
@@ -260,6 +267,12 @@ def write_to_csv(table):
 
         # loop over times of the weekday
         for y in x.times:
+
+            # add counter value to array
+            indicies.append(counter)
+
+            # increment counter
+            counter += 1
 
             # save the times
             time.append(y.time_of_day)
@@ -285,6 +298,13 @@ def write_to_csv(table):
     # dictionary of lists
     dict = {'Weekday': week, 'Time': time, 'Mode': mode, 'Median': median, 'Mean': mean, 'High': high, 'Low': low, 'Std': std}
 
+    # dataframe for visualisation
+    df2 = pd.DataFrame({'xvalues':indicies,'yvalues':mean})
+
+    # plot visualisation
+    plt.plot('xvalues','yvalues',data=df2)
+    plt.show()
+
     # add dictinoary to dataFrame
     df = pd.DataFrame(dict)
 
@@ -294,6 +314,7 @@ def write_to_csv(table):
 
 # START OF MAIN
 
+# get current time of start
 start_time = ti.time()
 
 # Create a table
@@ -332,13 +353,19 @@ feed_table(ta1, arr)
 # calculate statistics on table values
 ta1.calculate_statistics()
 
+# write table to csv
+write_to_csv(ta1)
+
+x = [10,12,50,25,10]
+
+plt.hist(x,5)
+plt.show()
+
+# calculate and print the execution time of program
+print("--- Execution time of program %s seconds ---" % (ti.time()-start_time))
+
 for x in ta1.weekdays:
     print('Weekday: %d' % x.weekday_num)
     for y in x.times:
         print('\tTime %.2f\t Value %s\t Stats %s' %
               (y.time_of_day, y.numbers, y.statistics))
-
-print("--- Execution time of program %s seconds ---" % (ti.time()-start_time))
-
-# write table to csv
-write_to_csv(ta1)
