@@ -311,8 +311,9 @@ def write_to_csv(table):
     # saving the dataFrame (excluding indicies)
     df.to_csv('save.csv', header=True, index=False)
 
-
-# START OF MAIN
+###########################################################################################################################
+##################################################### START OF MAIN #######################################################
+###########################################################################################################################
 
 # get current time of start
 start_time = ti.time()
@@ -356,11 +357,6 @@ ta1.calculate_statistics()
 # write table to csv
 write_to_csv(ta1)
 
-x = [10,12,50,25,10]
-
-plt.hist(x,5)
-plt.show()
-
 # calculate and print the execution time of program
 print("--- Execution time of program %s seconds ---" % (ti.time()-start_time))
 
@@ -369,3 +365,7 @@ for x in ta1.weekdays:
     for y in x.times:
         print('\tTime %.2f\t Value %s\t Stats %s' %
               (y.time_of_day, y.numbers, y.statistics))
+
+###########################################################################################################################
+##################################################### END OF MAIN #######################################################
+###########################################################################################################################
